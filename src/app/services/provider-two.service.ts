@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {SchemaDbAbstract} from '../interfaces';
 import {Observable} from 'rxjs';
+import {SchemaDbAbstract} from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AppService implements SchemaDbAbstract {
+export class ProviderTwoService implements SchemaDbAbstract {
 
   constructor() { }
 

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {AppService} from './services/app.service';
 import {CountryService} from './services/country.service';
 import {UserService} from './services/user.service';
 

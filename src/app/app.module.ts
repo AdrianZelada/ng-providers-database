@@ -1,10 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {InjectionToken, NgModule} from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {appfactoryDB, connectDB, DatabaseConnect, DATACONNECT} from './abstracts/database-connect.abstract';
+
+import {DATACONNECT_ONE, ProviderOneConnection, providerOneConnectionFactory} from './connection/connection-one/provider-one-connection';
+import { providerOneFactory} from './connection/connection-one/provider-one';
+import {ProviderOneService} from './services/provider-one.service';
+import {ProviderTwoService} from './services/provider-two.service';
+import {DATACONNECT_TWO, providerTwoFactory} from './connection/connection-two/provider-two';
+import {ProviderTwoConnection, providerTwoConnectionFactory} from './connection/connection-two/provider-two-connection';
+import {DatabaseConnectAbstract} from './interfaces';
+import {environment} from '../environments/environment';
 import {AppService} from './services/app.service';
+import {providerAppFactory} from './services/app-provider';
+
+export const DATACONNECT = new InjectionToken<DatabaseConnectAbstract>('database connect 222 2');
 
 @NgModule({
   declarations: [
@@ -15,13 +26,37 @@ import {AppService} from './services/app.service';
     AppRoutingModule,
   ],
   providers: [
+    // {
+    //   provide: DATACONNECT_ONE,
+    //   useFactory: providerOneConnectionFactory
+    // },
+    // {
+    //   provide: ProviderOneService,
+    //   useFactory: providerOneFactory,
+    //   deps: [DATACONNECT_ONE]
+    // },
+    // {
+    //   provide: DATACONNECT_TWO,
+    //   useFactory: providerTwoConnectionFactory
+    // },
+    // {
+    //   provide: ProviderTwoService,
+    //   useFactory: providerTwoFactory,
+    //   deps: [DATACONNECT_TWO]
+    // }
     {
       provide: DATACONNECT,
-      useFactory: connectDB
+      useFactory: function() {
+        if (environment.production) {
+          return new ProviderOneConnection();
+        } else {
+          return new ProviderTwoConnection();
+        }
+      }
     },
     {
       provide: AppService,
-      useFactory: appfactoryDB,
+      useFactory: providerAppFactory,
       deps: [DATACONNECT]
     }
   ],
